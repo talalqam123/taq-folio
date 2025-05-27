@@ -1,14 +1,10 @@
 {
-  "homepage": "https://talalqam123.github.io/taq-folio/",
   "name": "taq-portfolio-frontend",
   "version": "1.0.0",
   "type": "module",
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
-
     "build": "vite build",
     "preview": "vite preview",
     "check": "tsc"
