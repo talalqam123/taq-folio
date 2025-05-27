@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import ComputersCanvas from "@/3d-models/Computers";
 
 const Hero = () => {
   const typingTextRef = useRef<HTMLParagraphElement>(null);
@@ -178,69 +179,9 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <motion.div 
-              className="relative w-64 h-64 md:w-80 md:h-80"
-              animate={{ y: [0, -15, 0] }}
-              transition={{ 
-                duration: 6, 
-                repeat: Infinity,
-                repeatType: "reverse", 
-                ease: "easeInOut" 
-              }}
-            >
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary to-secondary opacity-20 blur-xl"></div>
-              <img 
-                src="https://iili.io/3VIUMue.jpg" 
-                alt="Talal Ahmad" 
-                className="w-full h-full object-cover rounded-full border-4 border-primary/50"
-              />
-              
-              <motion.div 
-                className="absolute -top-4 -right-4 bg-card p-3 rounded-full purple-glow"
-                animate={{ rotate: [0, 10, 0, -10, 0] }}
-                transition={{ duration: 5, repeat: Infinity }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-primary text-2xl"
-                >
-                  <polyline points="16 18 22 12 16 6"></polyline>
-                  <polyline points="8 6 2 12 8 18"></polyline>
-                </svg>
-              </motion.div>
-              
-              <motion.div 
-                className="absolute -bottom-4 -left-4 bg-card p-3 rounded-full teal-glow"
-                animate={{ rotate: [0, -10, 0, 10, 0] }}
-                transition={{ duration: 5, repeat: Infinity, delay: 1 }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-secondary text-2xl"
-                >
-                  <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-                  <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-                  <path d="M2 2l7.586 7.586"></path>
-                  <circle cx="11" cy="11" r="2"></circle>
-                </svg>
-              </motion.div>
-            </motion.div>
+            <div className="w-full h-[500px] relative">
+              <ComputersCanvas />
+            </div>
           </motion.div>
         </div>
       </div>
