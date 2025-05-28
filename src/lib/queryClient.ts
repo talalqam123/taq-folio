@@ -1,6 +1,6 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-1cz4.onrender.com';
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
@@ -14,14 +14,17 @@ export async function apiRequest(
   url: string,
   data?: unknown | undefined,
 ): Promise<Response> {
-  // Ensure url starts with '/' and combine with base URL
-  const fullUrl = `${API_BASE_URL}${url.startsWith('/') ? url : `/${url}`}`;
+  const fullUrl = url.startsWith('http') ? url : `${API_URL}${url}`;
   
   const res = await fetch(fullUrl, {
     method,
-    headers: data ? { "Content-Type": "application/json" } : {},
+    headers: {
+      ...(data ? { "Content-Type": "application/json" } : {}),
+      'Origin': window.location.origin,
+    },
     body: data ? JSON.stringify(data) : undefined,
     credentials: "include",
+    mode: 'cors',
   });
 
   await throwIfResNotOk(res);
@@ -35,10 +38,14 @@ export const getQueryFn: <T>(options: {
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
     const url = queryKey[0] as string;
-    const fullUrl = `${API_BASE_URL}${url.startsWith('/') ? url : `/${url}`}`;
+    const fullUrl = url.startsWith('http') ? url : `${API_URL}${url}`;
     
     const res = await fetch(fullUrl, {
       credentials: "include",
+      headers: {
+        'Origin': window.location.origin,
+      },
+      mode: 'cors',
     });
 
     if (unauthorizedBehavior === "returnNull" && res.status === 401) {
