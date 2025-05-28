@@ -11,6 +11,12 @@ export default defineConfig({
     },
   },
   server: {
-    port: 5173
+    port: 5173,
+    proxy: {
+      '/api': {
+        target: 'https://portfolio-backend-1cz4.onrender.com/',
+        changeOrigin: true,
+      }
+    }
   }
 });
