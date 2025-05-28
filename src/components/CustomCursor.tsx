@@ -1,163 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
-import { motion, useSpring, useMotionValue } from 'framer-motion';
+import React from 'react';
 
-interface CursorConfig {
-  dotSize: number;
-  ringSize: number;
-  dotColor: string;
-  ringColor: string;
-  speed: number;
-  magneticForce: number;
-}
+const CustomCursor = () => {
+  return (
+    <style>{`
+      * {
+        cursor: url("data:image/svg+xml,%3Csvg fill='none' height='32' viewBox='0 0 20 20' width='32' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='cursorGradient' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23845EF7;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%236741D9;stop-opacity:1' /%3E%3C/linearGradient%3E%3Cfilter id='shadow' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeDropShadow dx='0.5' dy='0.5' stdDeviation='0.5' flood-color='black' flood-opacity='0.3'/%3E%3C/filter%3E%3C/defs%3E%3Cpath d='m6.63564 2.28741c-.65239-.53716-1.63564-.07309-1.63564.77199v13.9988c0 .9261 1.15025 1.3547 1.75622.6543l3.52368-4.0724c.2849-.3293.6989-.5185 1.1343-.5185h5.5919c.9383 0 1.36-1.1756.6357-1.772z' fill='url(%23cursorGradient)' filter='url(%23shadow)'/%3E%3C/svg%3E") 2 2, auto !important;
+      }
 
-const defaultConfig: CursorConfig = {
-  dotSize: 8,
-  ringSize: 40,
-  dotColor: 'hsl(var(--primary))',
-  ringColor: 'hsl(var(--primary))',
-  speed: 1,
-  magneticForce: 0.5,
+      a, button, [role="button"], input[type="submit"], input[type="button"], select, .clickable {
+        cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='28' viewBox='0 0 106.17 122.88'%3E%3Cdefs%3E%3ClinearGradient id='handGradient' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF8787;stop-opacity:1'/%3E%3Cstop offset='100%25' style='stop-color:%23FF6B6B;stop-opacity:1'/%3E%3C/linearGradient%3E%3Cfilter id='innerShadow'%3E%3CfeOffset dx='1' dy='1'/%3E%3CfeGaussianBlur stdDeviation='1'/%3E%3CfeComposite operator='out' in='SourceGraphic'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.6'/%3E%3C/feComponentTransfer%3E%3CfeBlend mode='normal' in2='SourceGraphic'/%3E%3C/filter%3E%3Cfilter id='glow'%3E%3CfeGaussianBlur stdDeviation='1' result='blur'/%3E%3CfeFlood flood-color='%23FF8787' flood-opacity='0.3'/%3E%3CfeComposite in2='blur' operator='in'/%3E%3CfeMerge%3E%3CfeMergeNode/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23glow)'%3E%3Cpath d='M29.96,67.49c-0.16-0.09-0.32-0.19-0.47-0.31c-1.95-1.56-4.08-3.29-5.94-4.81c-2.69-2.2-5.8-4.76-7.97-6.55c-1.49-1.23-3.17-2.07-4.75-2.39c-1.02-0.2-1.95-0.18-2.67,0.12c-0.59,0.24-1.1,0.72-1.45,1.48c-0.45,0.99-0.66,2.41-0.54,4.32c0.11,1.69,0.7,3.55,1.48,5.33c1.16,2.63,2.73,5.04,3.89,6.59c0.07,0.09,0.13,0.19,0.19,0.29l23.32,33.31c0.3,0.43,0.47,0.91,0.53,1.4l0.01,0c0.46,3.85,1.28,6.73,2.49,8.54c0.88,1.31,2.01,1.98,3.42,1.94l0.07,0v-0.01h36.38c0.09,0,0.17,0,0.26,0.01c2.28-0.03,4.36-0.71,6.25-2.02c2.09-1.44,3.99-3.68,5.72-6.7c0.03-0.05,0.06-0.11,0.1-0.16c0.67-1.15,1.55-2.6,2.41-4.02c3.72-6.13,6.96-11.45,7.35-19.04L99.8,74.34c-0.02-0.15-0.03-0.3-0.03-0.45c0-0.14,0.02-1.13,0.03-2.46c0.09-6.92,0.19-15.48-6.14-16.56h-4.05l-0.04,0c-0.02,1.95-0.15,3.93-0.27,5.86c-0.11,1.71-0.21,3.37-0.21,4.95c0,1.7-1.38,3.08-3.08,3.08c-1.7,0-3.08-1.38-3.08-3.08c0-1.58,0.12-3.42,0.24-5.33c0.41-6.51,0.89-13.99-4.33-14.93H74.8c-0.23,0-0.45-0.02-0.66-0.07c0.04,2.36-0.12,4.81-0.27,7.16c-0.11,1.71-0.21,3.37-0.21,4.95c0,1.7-1.38,3.08-3.08,3.08c-1.7,0-3.08-1.38-3.08-3.08c0-1.58,0.12-3.42,0.24-5.33c0.41-6.51,0.89-13.99-4.33-14.93h-4.05c-0.28,0-0.55-0.04-0.8-0.11V49c0,1.7-1.38,3.08-3.08,3.08c-1.7,0-3.08-1.38-3.08-3.08V17.05c0-5.35-2.18-8.73-4.97-10.14c-1.02-0.52-2.12-0.78-3.21-0.78c-1.08,0-2.18,0.26-3.19,0.77c-2.76,1.4-4.92,4.79-4.92,10.28v56c0,1.7-1.38,3.08-3.08,3.08c-1.7,0-3.08-1.38-3.08-3.08V67.49L29.96,67.49z' fill='url(%23handGradient)' filter='url(%23innerShadow)'/%3E%3C/g%3E%3C/svg%3E") 4 0, pointer !important;
+      }
+    `}</style>
+  );
 };
 
-export default function CustomCursor({ config = defaultConfig }: { config?: Partial<CursorConfig> }) {
-  const cursorConfig = { ...defaultConfig, ...config };
-  const [isVisible, setIsVisible] = useState(false);
-  const [isPointing, setIsPointing] = useState(false);
-  const [magneticElement, setMagneticElement] = useState<HTMLElement | null>(null);
-  
-  // Cursor position with spring physics
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
-  
-  // Spring configuration for smooth movement
-  const springConfig = { damping: 25, stiffness: 700 * cursorConfig.speed };
-  const dotX = useSpring(cursorX, springConfig);
-  const dotY = useSpring(cursorY, springConfig);
-  
-  // Slower spring for the ring
-  const ringSpringConfig = { damping: 15, stiffness: 200 * cursorConfig.speed };
-  const ringX = useSpring(cursorX, ringSpringConfig);
-  const ringY = useSpring(cursorY, ringSpringConfig);
-
-  useEffect(() => {
-    // Check if device has hover capability
-    if (window.matchMedia('(hover: hover)').matches) {
-      setIsVisible(true);
-      
-      const moveCursor = (e: MouseEvent) => {
-        if (magneticElement) {
-          const rect = magneticElement.getBoundingClientRect();
-          const centerX = rect.left + rect.width / 2;
-          const centerY = rect.top + rect.height / 2;
-          
-          // Calculate magnetic pull
-          const deltaX = centerX - e.clientX;
-          const deltaY = centerY - e.clientY;
-          const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-          const maxDistance = 100; // Maximum distance for magnetic effect
-          
-          if (distance < maxDistance) {
-            const force = (1 - distance / maxDistance) * cursorConfig.magneticForce;
-            cursorX.set(e.clientX + deltaX * force);
-            cursorY.set(e.clientY + deltaY * force);
-            return;
-          }
-        }
-        
-        cursorX.set(e.clientX);
-        cursorY.set(e.clientY);
-      };
-
-      const handlePointerElements = () => {
-        const interactiveElements = document.querySelectorAll(
-          'a, button, [role="button"], input, select, textarea'
-        );
-        
-        const handlePointerEnter = (e: Event) => {
-          setIsPointing(true);
-          setMagneticElement(e.currentTarget as HTMLElement);
-        };
-        
-        const handlePointerLeave = () => {
-          setIsPointing(false);
-          setMagneticElement(null);
-        };
-
-        interactiveElements.forEach(element => {
-          element.addEventListener('mouseenter', handlePointerEnter);
-          element.addEventListener('mouseleave', handlePointerLeave);
-        });
-
-        return () => {
-          interactiveElements.forEach(element => {
-            element.removeEventListener('mouseenter', handlePointerEnter);
-            element.removeEventListener('mouseleave', handlePointerLeave);
-          });
-        };
-      };
-
-      window.addEventListener('mousemove', moveCursor);
-      const cleanup = handlePointerElements();
-      
-      // Hide cursor when leaving the window
-      const handleMouseLeave = () => setIsVisible(false);
-      const handleMouseEnter = () => setIsVisible(true);
-      
-      document.documentElement.addEventListener('mouseleave', handleMouseLeave);
-      document.documentElement.addEventListener('mouseenter', handleMouseEnter);
-
-      return () => {
-        window.removeEventListener('mousemove', moveCursor);
-        cleanup();
-        document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
-        document.documentElement.removeEventListener('mouseenter', handleMouseEnter);
-      };
-    }
-  }, [cursorX, cursorY, magneticElement, cursorConfig.magneticForce]);
-
-  if (!isVisible) return null;
-
-  return (
-    <>
-      {/* Main cursor dot */}      <motion.div
-        className="fixed pointer-events-none z-[99999] rounded-full mix-blend-difference"
-        style={{
-          x: dotX,
-          y: dotY,
-          width: cursorConfig.dotSize,
-          height: cursorConfig.dotSize,
-          backgroundColor: cursorConfig.dotColor,
-          opacity: isPointing ? 0.5 : 0.8,
-          scale: isPointing ? 1.2 : 1,
-        }}
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: isPointing ? 0.5 : 0.8, scale: isPointing ? 1.2 : 1 }}
-        transition={{
-          scale: { type: "spring", damping: 20, stiffness: 300 },
-          opacity: { duration: 0.2 },
-        }}
-      />
-
-      {/* Cursor ring */}      <motion.div
-        className="fixed pointer-events-none z-[99998] rounded-full mix-blend-difference"
-        style={{
-          x: ringX,
-          y: ringY,
-          width: cursorConfig.ringSize,
-          height: cursorConfig.ringSize,
-          border: `2px solid ${cursorConfig.ringColor}`,
-          translateX: -cursorConfig.ringSize / 2,
-          translateY: -cursorConfig.ringSize / 2,
-          opacity: isPointing ? 0.4 : 0.15,
-          scale: isPointing ? 1.4 : 1,
-        }}
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: isPointing ? 0.4 : 0.15, scale: isPointing ? 1.4 : 1 }}
-        transition={{
-          scale: { type: "spring", damping: 15, stiffness: 150 },
-          opacity: { duration: 0.3 },
-        }}
-      />
-    </>
-  );
-}
+export default CustomCursor; 

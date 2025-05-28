@@ -5,15 +5,22 @@ import {
   FaNodeJs, 
   FaMobileAlt, 
   FaServer, 
-  FaDatabase 
+  FaDatabase,
+  FaPython,
+  FaFire
 } from 'react-icons/fa';
+import { 
+  SiExpress, 
+  SiPostgresql, 
+  SiDjango 
+} from 'react-icons/si';
 
-export interface FrontendSkill {
+export interface SkillCategory {
   name: string;
   percentage: string;
 }
 
-export const frontendSkills: FrontendSkill[] = [
+export const frontendSkills: SkillCategory[] = [
   {
     name: "React.js",
     percentage: "95%"
@@ -36,6 +43,40 @@ export const frontendSkills: FrontendSkill[] = [
   }
 ];
 
+export const backendSkills: SkillCategory[] = [
+  {
+    name: "Node.js",
+    percentage: "85%"
+  },
+  {
+    name: "Express.js",
+    percentage: "80%"
+  },
+  {
+    name: "Python",
+    percentage: "75%"
+  },
+  {
+    name: "Django/Flask",
+    percentage: "70%"
+  }
+];
+
+export const databaseSkills: SkillCategory[] = [
+  {
+    name: "MongoDB",
+    percentage: "85%"
+  },
+  {
+    name: "PostgreSQL",
+    percentage: "80%"
+  },
+  {
+    name: "Firebase",
+    percentage: "75%"
+  }
+];
+
 export interface OtherSkill {
   name: string;
   icon: React.ReactNode;
@@ -51,19 +92,19 @@ export const otherSkills: OtherSkill[] = [
     icon: React.createElement(FaGitAlt)
   },
   {
-    name: "MongoDB",
-    icon: React.createElement(FaDatabase)
-  },
-  {
     name: "Node.js",
     icon: React.createElement(FaNodeJs)
   },
   {
-    name: "React Native",
-    icon: React.createElement(FaMobileAlt)
+    name: "Python",
+    icon: React.createElement(FaPython)
   },
   {
-    name: "AWS",
-    icon: React.createElement(FaServer)
+    name: "PostgreSQL",
+    icon: React.createElement(SiPostgresql)
+  },
+  {
+    name: "MongoDB",
+    icon: React.createElement(FaDatabase)
   }
 ];

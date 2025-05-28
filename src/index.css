@@ -3,68 +3,45 @@
 @tailwind utilities;
 
 @layer base {
-  /* Hide default cursor on all elements */
-  html, body {
-    cursor: none !important;
+  :root {
+    --background: 221 70% 12%;
+    --foreground: 0 0% 98%;
+    --muted: 225 25% 25%;
+    --muted-foreground: 240 5% 84%;
+    --popover: 221 70% 14%;
+    --popover-foreground: 0 0% 98%;
+    --card: 221 70% 14%;
+    --card-foreground: 0 0% 98%;
+    --border: 240 3.7% 25%;
+    --input: 240 3.7% 25%;
+    --primary: 266 100% 67%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 180 100% 38%;
+    --secondary-foreground: 0 0% 100%;
+    --accent: 156 95% 42%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --ring: 266 100% 67%;
+    --radius: 0.5rem;
+    
+    /* Chart colors */
+    --chart-1: 266 100% 67%;
+    --chart-2: 180 100% 38%;
+    --chart-3: 156 95% 42%;
+    --chart-4: 245 58% 51%;
+    --chart-5: 329 86% 56%;
+    
+    /* Sidebar colors */
+    --sidebar-background: 221 70% 12%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 266 100% 67%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 156 95% 42%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 240 3.7% 25%;
+    --sidebar-ring: 266 100% 67%;
   }
-
-  * {
-    cursor: none;
-  }
-
-  /* Enable default cursor for touch devices */
-  @media (hover: none) {
-    html, body, * {
-      cursor: auto !important;
-    }
-  }
-
-  /* Hide cursor on touch devices */
-  @media (hover: none) {
-    .cursor-custom {
-      display: none !important;
-    }
-  }
-}
-
-:root {
-  --background: 221 70% 12%;
-  --foreground: 0 0% 98%;
-  --muted: 225 25% 25%;
-  --muted-foreground: 240 5% 84%;
-  --popover: 221 70% 14%;
-  --popover-foreground: 0 0% 98%;
-  --card: 221 70% 14%;
-  --card-foreground: 0 0% 98%;
-  --border: 240 3.7% 25%;
-  --input: 240 3.7% 25%;
-  --primary: 266 100% 67%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 180 100% 38%;
-  --secondary-foreground: 0 0% 100%;
-  --accent: 156 95% 42%;
-  --accent-foreground: 0 0% 100%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 0% 98%;
-  --ring: 266 100% 67%;
-  --radius: 0.5rem;
-  
-  /* Chart colors */
-  --chart-1: 266 100% 67%;
-  --chart-2: 180 100% 38%;
-  --chart-3: 156 95% 42%;
-  --chart-4: 245 58% 51%;
-  --chart-5: 329 86% 56%;
-  
-  /* Sidebar colors */
-  --sidebar-background: 221 70% 12%;
-  --sidebar-foreground: 0 0% 98%;
-  --sidebar-primary: 266 100% 67%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 156 95% 42%;
-  --sidebar-accent-foreground: 0 0% 100%;
-  --sidebar-border: 240 3.7% 25%;
-  --sidebar-ring: 266 100% 67%;
 }
 
 .light {

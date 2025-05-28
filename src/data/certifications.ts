@@ -17,7 +17,7 @@ export const certifications: Certification[] = [
   },
   {
     title: "BSc Computer Science",
-    issuer: "University of Technology",
+    issuer: "COMSATS University, Islamabad",
     date: "2014 - 2018",
     icon: React.createElement(FaGraduationCap)
   },

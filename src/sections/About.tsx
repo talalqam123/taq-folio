@@ -48,11 +48,11 @@ const About = () => {
             transition={{ duration: 0.8 }}
           >
             <h3 className="text-2xl font-bold mb-6 text-white">
-              Frontend Developer with <span className="text-primary">5+ years</span> of experience
+            Full Stack Developer | JavaScript/Node.js Specialist | <span className="text-primary">5+ years</span> of experience
             </h3>
             
             <p className="text-muted-foreground mb-6">
-              I'm passionate about crafting beautiful, functional web experiences. My journey in web development began in 2018, and I've been obsessed with creating innovative solutions and pushing the boundaries of what's possible on the web ever since.
+            I architect and build end-to-end web applications that are scalable, secure, and user-centric. From designing intuitive UIs with React to engineering robust backend systems with Node.js, I bridge the gap between frontend elegance and backend performance. My journey since 2018 has been fueled by solving complex problems with clean, maintainable code.
             </p>
             
             <p className="text-muted-foreground mb-6">

@@ -23,7 +23,7 @@ const Hero = () => {
   useEffect(() => {
     if (!typingTextRef.current) return;
     
-    const text = "A";
+    const text = "A Full Stack Developer";
     const typingSpeed = 100; // ms per character
     
     let charIndex = 0;
@@ -78,7 +78,7 @@ const Hero = () => {
             </div>
             
             <p className="text-muted-foreground mb-8 max-w-lg mx-auto md:mx-0">
-              I build exceptional digital experiences that are fast, accessible, and visually appealing. Let's work together to bring your ideas to life.
+            I design and develop scalable, high-performance web applications with clean code and modern technologies. Let’s collaborate to turn your vision into reality!
             </p>
             
             <div className="flex flex-wrap justify-center md:justify-start gap-4">
@@ -102,7 +102,7 @@ const Hero = () => {
             
             <div className="flex justify-center md:justify-start space-x-6 mt-8">
               <motion.a 
-                href="https://github.com" 
+                href="https://github.com/TalalAhmad786" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-white hover:text-primary transition-colors duration-300"
@@ -119,7 +119,7 @@ const Hero = () => {
                 </svg>
               </motion.a>
               <motion.a 
-                href="https://linkedin.com" 
+                href="https://www.linkedin.com/in/talal-ahmad-qamar-303396214" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-white hover:text-secondary transition-colors duration-300"

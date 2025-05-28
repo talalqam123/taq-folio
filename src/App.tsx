@@ -38,17 +38,8 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <TooltipProvider>
-            <CustomCursor
-                config={{
-                  dotSize: 8,
-                  ringSize: 40,
-                  dotColor: "hsl(var(--primary))",
-                  ringColor: "hsl(var(--primary))",
-                  speed: 1,
-                  magneticForce: 0.5,
-                }}
-              />
             <div className="min-h-screen flex flex-col">
+              <CustomCursor />
               <Header />
               <main className="flex-grow">
                 <Switch>

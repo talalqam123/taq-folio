@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { frontendSkills, otherSkills } from "@/data/skills";
+import { frontendSkills, backendSkills, databaseSkills, otherSkills } from "@/data/skills";
 import { certifications } from "@/data/certifications";
 import { useEffect, useRef } from "react";
+import React from "react";
 
 const Skills = () => {
   const progressRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -33,6 +34,45 @@ const Skills = () => {
     };
   }, []);
 
+  const SkillCategory = ({ title, skills, icon, colorClass }: { title: string; skills: { name: string; percentage: string }[]; icon: React.ReactNode; colorClass: string }) => (
+    <motion.div
+      initial={{ opacity: 0, x: -50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8 }}
+      className="mb-16"
+    >
+      <h3 className="text-2xl font-bold mb-8 text-white flex items-center">
+        <span className={`text-2xl ${colorClass} mr-3`}>{icon}</span>
+        {title}
+      </h3>
+      
+      <div className="space-y-6">
+        {skills.map((skill, index) => (
+          <div key={index}>
+            <div className="flex justify-between mb-2">
+              <span className="font-medium text-white">{skill.name}</span>
+              <span className={colorClass}>{skill.percentage}</span>
+            </div>
+            <div className="h-1.5 bg-card rounded-full">
+              <motion.div
+                ref={(el) => (progressRefs.current.push(el))}
+                data-percentage={skill.percentage}
+                className={`h-full rounded-full bg-gradient-to-r ${
+                  colorClass.includes('primary') ? 'from-primary to-accent' :
+                  colorClass.includes('secondary') ? 'from-secondary to-primary' :
+                  'from-accent to-secondary'
+                }`}
+                style={{ width: "0%" }}
+                transition={{ duration: 1, delay: 0.2 }}
+              ></motion.div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
+
   return (
     <section id="skills" className="py-20 relative overflow-hidden">
       <div className="absolute top-0 right-0 w-full h-full">
@@ -57,76 +97,30 @@ const Skills = () => {
           </p>
         </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <h3 className="text-2xl font-bold mb-8 text-white flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-secondary mr-3"
-              >
-                <polyline points="16 18 22 12 16 6"></polyline>
-                <polyline points="8 6 2 12 8 18"></polyline>
-              </svg>
-              Frontend Development
-            </h3>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="space-y-8">
+            <SkillCategory
+              title="Frontend Development"
+              skills={frontendSkills}
+              icon={<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>}
+              colorClass="text-secondary"
+            />
             
-            <div className="space-y-6">
-              {frontendSkills.map((skill, index) => (
-                <div key={index}>
-                  <div className="flex justify-between mb-2">
-                    <span className="font-medium text-white">{skill.name}</span>
-                    <span className="text-secondary">{skill.percentage}</span>
-                  </div>
-                  <div className="h-1.5 bg-card rounded-full">
-                    <motion.div
-                      ref={(el) => (progressRefs.current[index] = el)}
-                      data-percentage={skill.percentage}
-                      className="h-full rounded-full bg-gradient-to-r from-secondary to-primary"
-                      style={{ width: "0%" }}
-                      transition={{ duration: 1, delay: 0.2 }}
-                    ></motion.div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+            <SkillCategory
+              title="Backend Development"
+              skills={backendSkills}
+              icon={<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>}
+              colorClass="text-primary"
+            />
+          </div>
           
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <h3 className="text-2xl font-bold mb-8 text-white flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="text-primary mr-3"
-              >
-                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-              </svg>
-              Tools & Other Skills
-            </h3>
+          <div className="space-y-8">
+            <SkillCategory
+              title="Database & Storage"
+              skills={databaseSkills}
+              icon={<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>}
+              colorClass="text-accent"
+            />
             
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
               {otherSkills.map((skill, index) => (
@@ -152,7 +146,7 @@ const Skills = () => {
                 </motion.div>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
         
         <motion.div 

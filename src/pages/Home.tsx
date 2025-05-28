@@ -20,7 +20,7 @@ export default function Home() {
       <Projects onOpenProject={setSelectedProject} />
       <Skills />
       <Contact />
-      <Footer />
+      {/* <Footer /> */}
       
       <ProjectModal 
         selectedProject={selectedProject}
