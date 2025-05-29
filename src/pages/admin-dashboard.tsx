@@ -103,20 +103,20 @@ interface SiteSetting {
 
 // Form schemas
 const caseStudySchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters"),
-  slug: z.string().min(3, "Slug must be at least 3 characters").regex(/^[a-z0-9-]+$/, "Slug must contain only lowercase letters, numbers, and hyphens"),
-  excerpt: z.string().min(10, "Excerpt must be at least 10 characters"),
-  description: z.string().min(10, "Description must be at least 10 characters"),
+  title: z.string().min(1, "Title is required"),
+  slug: z.string().min(1, "Slug is required").regex(/^[a-z0-9-]+$/, "Slug must contain only lowercase letters, numbers, and hyphens"),
+  excerpt: z.string().min(1, "Excerpt is required"),
+  description: z.string().min(1, "Description is required"),
   coverImage: z.string().min(5, "Cover image URL must be at least 5 characters"),
-  clientName: z.string().min(2, "Client name must be at least 2 characters"),
-  clientIndustry: z.string().min(2, "Client industry must be at least 2 characters"),
+  clientName: z.string().optional(),
+  clientIndustry: z.string().optional(),
   duration: z.string().optional(),
-  services: z.string().array().min(1, "At least one service is required"),
-  challenge: z.string().min(10, "Challenge must be at least 10 characters"),
-  solution: z.string().min(10, "Solution must be at least 10 characters"),
-  result: z.string().min(10, "Result must be at least 10 characters"),
-  images: z.string().array().optional(),
-  technologies: z.string().array().min(1, "At least one technology is required"),
+  services: z.array(z.string()).optional(),
+  challenge: z.string().optional(),
+  solution: z.string().optional(),
+  result: z.string().optional(),
+  images: z.array(z.string()).optional(),
+  technologies: z.array(z.string()).min(1, "At least one technology is required"),
   testimonial: z.string().optional(),
   testimonialAuthor: z.string().optional(),
   testimonialRole: z.string().optional(),
@@ -735,7 +735,7 @@ export default function AdminDashboard() {
               {editingCaseStudy ? "Edit Case Study" : "Add New Case Study"}
             </DialogTitle>
             <DialogDescription>
-              Fill in the details for the case study
+              Fill in the details for the case study. Only Title, Slug, Cover Image, Technologies, Excerpt, and Description are required.
             </DialogDescription>
           </DialogHeader>
 
@@ -745,12 +745,13 @@ export default function AdminDashboard() {
               className="space-y-6"
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Required Fields */}
                 <FormField
                   control={caseStudyForm.control}
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Title</FormLabel>
+                      <FormLabel>Title *</FormLabel>
                       <FormControl>
                         <Input placeholder="Project Title" {...field} />
                       </FormControl>
@@ -764,7 +765,7 @@ export default function AdminDashboard() {
                   name="slug"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Slug</FormLabel>
+                      <FormLabel>Slug *</FormLabel>
                       <FormControl>
                         <Input placeholder="project-title" {...field} />
                       </FormControl>
@@ -778,24 +779,10 @@ export default function AdminDashboard() {
 
                 <FormField
                   control={caseStudyForm.control}
-                  name="clientName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Client Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Client Name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={caseStudyForm.control}
                   name="coverImage"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Cover Image URL</FormLabel>
+                      <FormLabel>Cover Image URL *</FormLabel>
                       <FormControl>
                         <Input placeholder="https://example.com/image.jpg" {...field} />
                       </FormControl>
@@ -809,7 +796,7 @@ export default function AdminDashboard() {
                   name="technologies"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Technologies</FormLabel>
+                      <FormLabel>Technologies *</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="React, Node.js, PostgreSQL"
@@ -825,33 +812,10 @@ export default function AdminDashboard() {
 
                 <FormField
                   control={caseStudyForm.control}
-                  name="featured"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>Featured</FormLabel>
-                        <FormDescription>
-                          Display this case study prominently
-                        </FormDescription>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="grid grid-cols-1 gap-6">
-                <FormField
-                  control={caseStudyForm.control}
                   name="excerpt"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Excerpt</FormLabel>
+                      <FormLabel>Excerpt *</FormLabel>
                       <FormControl>
                         <Textarea 
                           placeholder="A brief excerpt for previews"
@@ -869,7 +833,7 @@ export default function AdminDashboard() {
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>Description *</FormLabel>
                       <FormControl>
                         <Textarea 
                           placeholder="A detailed description of the project"
@@ -882,12 +846,27 @@ export default function AdminDashboard() {
                   )}
                 />
 
+                {/* Optional Fields */}
+                <FormField
+                  control={caseStudyForm.control}
+                  name="clientName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Client Name (Optional)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Client Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <FormField
                   control={caseStudyForm.control}
                   name="clientIndustry"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Client Industry</FormLabel>
+                      <FormLabel>Client Industry (Optional)</FormLabel>
                       <FormControl>
                         <Input placeholder="Technology, Healthcare, etc." {...field} />
                       </FormControl>
@@ -901,11 +880,10 @@ export default function AdminDashboard() {
                   name="duration"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Project Duration</FormLabel>
+                      <FormLabel>Project Duration (Optional)</FormLabel>
                       <FormControl>
                         <Input placeholder="3 months, 1 year, etc." {...field} />
                       </FormControl>
-                      <FormDescription>Optional</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -916,7 +894,7 @@ export default function AdminDashboard() {
                   name="services"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Services Provided</FormLabel>
+                      <FormLabel>Services Provided (Optional)</FormLabel>
                       <FormControl>
                         <Input 
                           placeholder="Web Development, UI/UX Design"
@@ -935,7 +913,7 @@ export default function AdminDashboard() {
                   name="challenge"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Challenge</FormLabel>
+                      <FormLabel>Challenge (Optional)</FormLabel>
                       <FormControl>
                         <Textarea 
                           placeholder="What challenges did the client face?"
@@ -953,7 +931,7 @@ export default function AdminDashboard() {
                   name="solution"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Solution</FormLabel>
+                      <FormLabel>Solution (Optional)</FormLabel>
                       <FormControl>
                         <Textarea 
                           placeholder="How did you solve the challenges?"
@@ -971,7 +949,7 @@ export default function AdminDashboard() {
                   name="result"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Results</FormLabel>
+                      <FormLabel>Results (Optional)</FormLabel>
                       <FormControl>
                         <Textarea 
                           placeholder="What were the outcomes of the project?"
@@ -984,58 +962,72 @@ export default function AdminDashboard() {
                   )}
                 />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormField
-                    control={caseStudyForm.control}
-                    name="testimonial"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Client Testimonial</FormLabel>
-                        <FormControl>
-                          <Textarea 
-                            placeholder="What did the client say about the project?"
-                            className="min-h-[120px]"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormDescription>Optional</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                <FormField
+                  control={caseStudyForm.control}
+                  name="testimonial"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Client Testimonial (Optional)</FormLabel>
+                      <FormControl>
+                        <Textarea 
+                          placeholder="What did the client say about the project?"
+                          className="min-h-[120px]"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                  <div className="space-y-6">
-                    <FormField
-                      control={caseStudyForm.control}
-                      name="testimonialAuthor"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Testimonial Author</FormLabel>
-                          <FormControl>
-                            <Input placeholder="John Doe" {...field} />
-                          </FormControl>
-                          <FormDescription>Optional</FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                <FormField
+                  control={caseStudyForm.control}
+                  name="testimonialAuthor"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Testimonial Author (Optional)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="John Doe" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                    <FormField
-                      control={caseStudyForm.control}
-                      name="testimonialRole"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Testimonial Author Role</FormLabel>
-                          <FormControl>
-                            <Input placeholder="CEO, Project Manager" {...field} />
-                          </FormControl>
-                          <FormDescription>Optional</FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
+                <FormField
+                  control={caseStudyForm.control}
+                  name="testimonialRole"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Testimonial Author Role (Optional)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="CEO, Project Manager" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={caseStudyForm.control}
+                  name="featured"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Featured (Optional)</FormLabel>
+                        <FormDescription>
+                          Display this case study prominently
+                        </FormDescription>
+                      </div>
+                    </FormItem>
+                  )}
+                />
               </div>
 
               <DialogFooter>
