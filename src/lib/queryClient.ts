@@ -22,6 +22,7 @@ export const apiRequest = async (
     headers: {
       'Content-Type': 'application/json',
       'Origin': window.location.origin,
+      'Accept': 'application/json',
     },
     ...(body ? { body: JSON.stringify(body) } : {}),
     mode: 'cors',
@@ -44,6 +45,7 @@ export const getQueryFn: <T>(options: {
       headers: {
         'Content-Type': 'application/json',
         'Origin': window.location.origin,
+        'Accept': 'application/json',
       },
       mode: 'cors',
     });
@@ -61,10 +63,9 @@ export const queryClient = new QueryClient({
     queries: {
       queryFn: getQueryFn({ on401: "throw" }),
       refetchInterval: false,
-      refetchOnWindowFocus: false,
-      staleTime: Infinity,
+      refetchOnWindowFocus: true,
+      staleTime: 1000 * 60 * 5,
       retry: (failureCount, error) => {
-        // Don't retry on 401 Unauthorized
         if (error instanceof Error && error.message.startsWith('401:')) {
           return false;
         }
