@@ -73,6 +73,12 @@ export default function AuthPage() {
           title: "Login successful",
           description: "You have been logged in successfully",
         });
+        // Check for redirect path
+        const redirectPath = sessionStorage.getItem('redirectPath');
+        if (redirectPath) {
+          sessionStorage.removeItem('redirectPath');
+          window.location.href = redirectPath; // Use window.location for full page reload
+        }
       },
     });
   };

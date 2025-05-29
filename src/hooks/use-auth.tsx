@@ -54,6 +54,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   } = useQuery<User | null, Error>({
     queryKey: ["/api/auth/user"],
     queryFn: getQueryFn({ on401: "returnNull" }),
+    staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
+    retry: false, // Don't retry on failure
   });
 
   // Login mutation
@@ -68,6 +70,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: (userData: User) => {
       queryClient.setQueryData(["/api/auth/user"], userData);
+      // Force a refetch of the user data to ensure we have the latest
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
     },
     onError: (error: Error) => {
       toast({

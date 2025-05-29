@@ -9,27 +9,26 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
-export async function apiRequest(
+export const apiRequest = async (
   method: string,
-  url: string,
-  data?: unknown | undefined,
-): Promise<Response> {
-  const fullUrl = url.startsWith('http') ? url : `${API_URL}${url}`;
+  path: string,
+  body?: any,
+) => {
+  const url = path.startsWith('http') ? path : `${API_URL}${path}`;
   
-  const res = await fetch(fullUrl, {
+  const response = await fetch(url, {
     method,
+    credentials: 'include',
     headers: {
-      ...(data ? { "Content-Type": "application/json" } : {}),
+      'Content-Type': 'application/json',
       'Origin': window.location.origin,
     },
-    body: data ? JSON.stringify(data) : undefined,
-    credentials: "include",
+    ...(body ? { body: JSON.stringify(body) } : {}),
     mode: 'cors',
   });
 
-  await throwIfResNotOk(res);
-  return res;
-}
+  return response;
+};
 
 type UnauthorizedBehavior = "returnNull" | "throw";
 export const getQueryFn: <T>(options: {
@@ -41,8 +40,9 @@ export const getQueryFn: <T>(options: {
     const fullUrl = url.startsWith('http') ? url : `${API_URL}${url}`;
     
     const res = await fetch(fullUrl, {
-      credentials: "include",
+      credentials: 'include',
       headers: {
+        'Content-Type': 'application/json',
         'Origin': window.location.origin,
       },
       mode: 'cors',
