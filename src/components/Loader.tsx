@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 
 const Loader = () => {
-  const letters = "TAlal AHMAD".split("");
+  const letters = "Talal Ahmad".split("");
   const codeLines = [
     "const developer = {",
     "  name: 'Talal Ahmad',",

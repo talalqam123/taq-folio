@@ -120,7 +120,8 @@ const caseStudySchema = z.object({
   testimonial: z.string().optional(),
   testimonialAuthor: z.string().optional(),
   testimonialRole: z.string().optional(),
-  featured: z.boolean().default(false)
+  featured: z.boolean().default(false),
+  websiteUrl: z.string().optional(),
 });
 
 type CaseStudyFormValues = z.infer<typeof caseStudySchema>;
@@ -181,7 +182,8 @@ export default function AdminDashboard() {
       testimonial: "",
       testimonialAuthor: "",
       testimonialRole: "",
-      featured: false
+      featured: false,
+      websiteUrl: "",
     },
   });
 
@@ -206,7 +208,8 @@ export default function AdminDashboard() {
         testimonial: editingCaseStudy.testimonial || "",
         testimonialAuthor: editingCaseStudy.testimonialAuthor || "",
         testimonialRole: editingCaseStudy.testimonialRole || "",
-        featured: editingCaseStudy.featured || false
+        featured: editingCaseStudy.featured || false,
+        websiteUrl: editingCaseStudy.websiteUrl || "",
       });
     } else {
       caseStudyForm.reset({
@@ -227,7 +230,8 @@ export default function AdminDashboard() {
         testimonial: "",
         testimonialAuthor: "",
         testimonialRole: "",
-        featured: false
+        featured: false,
+        websiteUrl: "",
       });
     }
   }, [editingCaseStudy, caseStudyForm]);
@@ -786,6 +790,23 @@ export default function AdminDashboard() {
                       <FormControl>
                         <Input placeholder="https://example.com/image.jpg" {...field} />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={caseStudyForm.control}
+                  name="websiteUrl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Website URL (Optional)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="https://example.com" {...field} />
+                      </FormControl>
+                      <FormDescription>
+                        Live website URL for the project
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}

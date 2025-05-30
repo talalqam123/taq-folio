@@ -1,7 +1,10 @@
+import React from 'react';
 import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { ExternalLink } from "lucide-react";
 
 interface CaseStudy {
   id: number;
@@ -10,6 +13,7 @@ interface CaseStudy {
   excerpt: string;
   description: string;
   coverImage: string;
+  websiteUrl?: string;
   clientName: string;
   clientIndustry: string;
   duration?: string;
@@ -44,6 +48,16 @@ const ProjectModal = ({ selectedProject, onClose }: ProjectModalProps) => {
   const project = selectedProject !== null && caseStudies ? caseStudies[selectedProject] : null;
   
   if (!project) return null;
+
+  // Check if project overview section should be shown
+  const hasOverviewInfo = project.clientName || project.clientIndustry || project.duration || (project.services && project.services.length > 0);
+  
+  // Check if challenge/solution/result section should be shown
+  const hasProjectDetails = project.challenge || project.solution || project.result;
+  
+  const handleVisitWebsite = (url: string) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
   
   return (
     <Dialog open={selectedProject !== null} onOpenChange={() => onClose()}>
@@ -73,77 +87,108 @@ const ProjectModal = ({ selectedProject, onClose }: ProjectModalProps) => {
               className="w-full h-auto rounded-lg mb-4"
             />
             
-            <h3 className="text-2xl font-bold mb-2 text-white">{project.title}</h3>
-            <p className="text-muted-foreground mb-6">{project.description}</p>
+            <div className="flex justify-between items-start mb-2">
+              <h3 className="text-2xl font-bold text-white">{project.title}</h3>
+              {project.websiteUrl && (
+                <Button
+                  onClick={() => handleVisitWebsite(project.websiteUrl!)}
+                  className="flex items-center gap-2"
+                  variant="secondary"
+                >
+                  <span>Visit Website</span>
+                  <ExternalLink size={16} />
+                </Button>
+              )}
+            </div>
             
-            <div className="mb-6">
-              <h4 className="text-xl font-semibold mb-3 text-secondary">Project Overview</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <p className="text-muted-foreground mb-2">
-                    <span className="text-white font-medium">Client:</span> {project.clientName}
-                  </p>
-                  <p className="text-muted-foreground mb-2">
-                    <span className="text-white font-medium">Industry:</span> {project.clientIndustry}
-                  </p>
-                  {project.duration && (
-                    <p className="text-muted-foreground">
-                      <span className="text-white font-medium">Duration:</span> {project.duration}
-                    </p>
+            <p className="text-muted-foreground mb-6 whitespace-pre-wrap">{project.description}</p>
+            
+            {hasOverviewInfo && (
+              <div className="mb-6">
+                <h4 className="text-xl font-semibold mb-3 text-secondary">Project Overview</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    {project.clientName && (
+                      <p className="text-muted-foreground mb-2">
+                        <span className="text-white font-medium">Client:</span> {project.clientName}
+                      </p>
+                    )}
+                    {project.clientIndustry && (
+                      <p className="text-muted-foreground mb-2">
+                        <span className="text-white font-medium">Industry:</span> {project.clientIndustry}
+                      </p>
+                    )}
+                    {project.duration && (
+                      <p className="text-muted-foreground">
+                        <span className="text-white font-medium">Duration:</span> {project.duration}
+                      </p>
+                    )}
+                  </div>
+                  {project.services && project.services.length > 0 && (
+                    <div>
+                      <p className="text-white font-medium mb-2">Services:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {project.services.map((service, index) => (
+                          <span 
+                            key={index}
+                            className="px-2 py-1 bg-secondary bg-opacity-20 rounded-full text-xs text-white"
+                          >
+                            {service}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </div>
-                <div>
-                  <p className="text-white font-medium mb-2">Services:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.services.map((service, index) => (
-                      <span 
-                        key={index}
-                        className="px-2 py-1 bg-secondary bg-opacity-20 rounded-full text-xs text-secondary"
-                      >
-                        {service}
-                      </span>
-                    ))}
-                  </div>
+              </div>
+            )}
+            
+            {project.technologies && project.technologies.length > 0 && (
+              <div className="mb-6">
+                <h4 className="text-xl font-semibold mb-3 text-secondary">Technologies Used</h4>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.technologies.map((tech, index) => (
+                    <span 
+                      key={index}
+                      className={
+                        index % 3 === 0 
+                          ? "px-3 py-1 bg-primary bg-opacity-20 rounded-full text-sm text-white" 
+                          : index % 3 === 1 
+                          ? "px-3 py-1 bg-secondary bg-opacity-20 rounded-full text-sm text-white" 
+                          : "px-3 py-1 bg-accent bg-opacity-20 rounded-full text-sm text-white"
+                      }
+                    >
+                      {tech}
+                    </span>
+                  ))}
                 </div>
               </div>
-            </div>
+            )}
             
-            <div className="mb-6">
-              <h4 className="text-xl font-semibold mb-3 text-secondary">Technologies Used</h4>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {project.technologies.map((tech, index) => (
-                  <span 
-                    key={index}
-                    className={
-                      index % 3 === 0 
-                        ? "px-3 py-1 bg-primary bg-opacity-20 rounded-full text-sm text-primary" 
-                        : index % 3 === 1 
-                        ? "px-3 py-1 bg-secondary bg-opacity-20 rounded-full text-sm text-secondary" 
-                        : "px-3 py-1 bg-accent bg-opacity-20 rounded-full text-sm text-accent"
-                    }
-                  >
-                    {tech}
-                  </span>
-                ))}
+            {hasProjectDetails && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                {project.challenge && (
+                  <div>
+                    <h4 className="text-xl font-semibold mb-3 text-secondary">Challenge</h4>
+                    <p className="text-muted-foreground">{project.challenge}</p>
+                  </div>
+                )}
+                {project.solution && (
+                  <div>
+                    <h4 className="text-xl font-semibold mb-3 text-secondary">Solution</h4>
+                    <p className="text-muted-foreground">{project.solution}</p>
+                  </div>
+                )}
+                {project.result && (
+                  <div>
+                    <h4 className="text-xl font-semibold mb-3 text-secondary">Results</h4>
+                    <p className="text-muted-foreground">{project.result}</p>
+                  </div>
+                )}
               </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-              <div>
-                <h4 className="text-xl font-semibold mb-3 text-secondary">Challenge</h4>
-                <p className="text-muted-foreground">{project.challenge}</p>
-              </div>
-              <div>
-                <h4 className="text-xl font-semibold mb-3 text-secondary">Solution</h4>
-                <p className="text-muted-foreground">{project.solution}</p>
-              </div>
-              <div>
-                <h4 className="text-xl font-semibold mb-3 text-secondary">Results</h4>
-                <p className="text-muted-foreground">{project.result}</p>
-              </div>
-            </div>
+            )}
 
-            {project.testimonial && (
+            {project.testimonial && project.testimonialAuthor && (
               <div className="glass p-6 rounded-xl mb-6">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

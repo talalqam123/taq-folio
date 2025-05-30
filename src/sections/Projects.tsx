@@ -162,7 +162,7 @@ const Projects: FC<ProjectsProps> = ({ onOpenProject }) => {
                             ? "px-2 py-1 bg-primary bg-opacity-20 rounded-full text-xs text-white" 
                             : techIndex % 3 === 1 
                             ? "px-2 py-1 bg-secondary bg-opacity-20 rounded-full text-xs text-white" 
-                            : "px-2 py-1 bg-accent bg-opacity-20 rounded-full text-xs text-accent"
+                            : "px-2 py-1 bg-accent bg-opacity-20 rounded-full text-xs text-white"
                         }
                       >
                         {tech}
