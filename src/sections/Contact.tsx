@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import EarthCanvas from '@/components/Earth';
+import EarthCanvas from '../components/Earth';
 import { useToast } from "@/hooks/use-toast";
 import emailjs from '@emailjs/browser';
 
@@ -36,7 +36,7 @@ const Contact: React.FC = () => {
     try {
       if (!formRef.current) return;
 
-      // Create template parameters
+      // Create template parameters for EmailJS
       const templateParams = {
         subject: formData.subject,
         name: formData.name,
@@ -47,12 +47,31 @@ const Contact: React.FC = () => {
         reply_to: formData.email
       };
 
+      // Send email via EmailJS
       await emailjs.send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
         templateParams,
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       );
+
+      // Save message to backend database
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save message to database');
+      }
       
       toast({
         title: "Message sent!",
@@ -68,7 +87,7 @@ const Contact: React.FC = () => {
         message: ""
       });
     } catch (error) {
-      console.error('Error sending email:', error);
+      console.error('Error sending message:', error);
       toast({
         title: "Error",
         description: "Something went wrong. Please try again later.",
