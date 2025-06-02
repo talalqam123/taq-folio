@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import EarthCanvas from '@/components/Earth';
 import { useToast } from "@/hooks/use-toast";
+import emailjs from '@emailjs/browser';
 
 const Contact: React.FC = () => {
   const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -13,9 +15,18 @@ const Contact: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
   
+  useEffect(() => {
+    // Initialize EmailJS
+    emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
+  }, []);
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({ ...prevData, [name]: value }));
+    // Map the EmailJS field names back to our state object keys
+    const stateKey = name === 'from_name' ? 'name' 
+                   : name === 'from_email' ? 'email'
+                   : name;
+    setFormData(prevData => ({ ...prevData, [stateKey]: value }));
   };
   
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,8 +34,25 @@ const Contact: React.FC = () => {
     setLoading(true);
     
     try {
-      // Simulating form submission
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      if (!formRef.current) return;
+
+      // Create template parameters
+      const templateParams = {
+        subject: formData.subject,
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+        to_email: 'talal.ahmad.qamar@gmail.com',
+        from_name: `${formData.name} (${formData.email})`,
+        reply_to: formData.email
+      };
+
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        templateParams,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
       
       toast({
         title: "Message sent!",
@@ -40,6 +68,7 @@ const Contact: React.FC = () => {
         message: ""
       });
     } catch (error) {
+      console.error('Error sending email:', error);
       toast({
         title: "Error",
         description: "Something went wrong. Please try again later.",
@@ -74,13 +103,13 @@ const Contact: React.FC = () => {
               I'm always open to new opportunities and collaborations. Whether you have a project in mind or just want to chat, feel free to reach out!
             </p>
             
-            <form onSubmit={handleSubmit} className="glass p-8 rounded-xl">
+            <form ref={formRef} onSubmit={handleSubmit} className="glass p-8 rounded-xl">
               <div className="mb-6">
                 <label htmlFor="name" className="block text-white mb-2">Name</label>
                 <input 
                   type="text" 
                   id="name"
-                  name="name"
+                  name="from_name"
                   value={formData.name}
                   onChange={handleChange}
                   className="w-full bg-card border border-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition duration-300"
@@ -94,7 +123,7 @@ const Contact: React.FC = () => {
                 <input 
                   type="email" 
                   id="email"
-                  name="email"
+                  name="from_email"
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full bg-card border border-border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition duration-300"
@@ -169,7 +198,7 @@ const Contact: React.FC = () => {
         </div>
 
         <motion.div
-          className="flex-1 h-[550px] w-full"
+          className="flex-1 h-[500px] w-full"
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}

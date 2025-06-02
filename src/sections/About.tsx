@@ -1,5 +1,6 @@
+import React from 'react';
 import { motion } from "framer-motion";
-import { timeline } from "@/data/timeline";
+import { timeline } from "../data/timeline";
 
 const About = () => {
   return (
@@ -135,7 +136,8 @@ const About = () => {
             </div>
             
             <motion.a 
-              href="#" 
+              href="/resume.pdf" 
+              download="my_resume.pdf"
               className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-accent to-secondary rounded-full font-medium text-white hover:opacity-90 transition duration-300 green-glow"
               whileHover={{ y: -5 }}
               whileTap={{ scale: 0.95 }}
